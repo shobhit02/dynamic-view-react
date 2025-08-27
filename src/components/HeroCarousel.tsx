@@ -15,21 +15,21 @@ const slides: CarouselSlide[] = [
     id: 1,
     title: "Welcome to",
     subtitle: "VALPRE",
-    image: "/lovable-uploads/6ae37d18-9918-4a5a-a42a-ae0819b43f05.png",
+    image: "https://picsum.photos/seed/valpre1/812/400",
     description: "Single source framework for Transformation"
   },
   {
     id: 2,
     title: "Secure Access",
     subtitle: "MANAGEMENT",
-    image: "/lovable-uploads/6ae37d18-9918-4a5a-a42a-ae0819b43f05.png",
+    image: "https://picsum.photos/seed/valpre2/812/400",
     description: "Streamlined approval process for teams"
   },
   {
     id: 3,
     title: "Enterprise",
     subtitle: "SOLUTION",
-    image: "/lovable-uploads/6ae37d18-9918-4a5a-a42a-ae0819b43f05.png",
+    image: "https://picsum.photos/seed/valpre3/812/400",
     description: "Built for modern organizations"
   }
 ];
