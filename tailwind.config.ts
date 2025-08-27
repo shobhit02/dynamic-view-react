@@ -61,6 +61,15 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				valpre: {
+					dark: 'hsl(var(--valpre-dark))',
+					card: 'hsl(var(--valpre-card))',
+					accent: 'hsl(var(--valpre-accent))',
+					'accent-glow': 'hsl(var(--valpre-accent-glow))',
+					text: 'hsl(var(--valpre-text))',
+					'text-muted': 'hsl(var(--valpre-text-muted))',
+					border: 'hsl(var(--valpre-border))'
 				}
 			},
 			borderRadius: {
