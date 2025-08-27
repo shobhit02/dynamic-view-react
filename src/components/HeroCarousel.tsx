@@ -38,15 +38,26 @@ export const HeroCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [reduced, setReduced] = useState(false);
   const pointerStartXRef = useRef<number | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const handler = () => setReduced(mq.matches);
+    handler();
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  useEffect(() => {
+    if (paused || reduced) return;
     const id = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % slides.length);
     }, 5000);
     return () => clearInterval(id);
-  }, []);
+  }, [paused, reduced]);
 
   const goTo = useCallback((index: number) => {
     const safe = (index + slides.length) % slides.length;
@@ -81,8 +92,20 @@ export const HeroCarousel = () => {
 
   const transform = `translateX(calc(${-currentIndex * 100}% + ${dragOffset}px))`;
 
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowRight') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+    else if (e.key === 'End') { e.preventDefault(); goTo(slides.length - 1); }
+  };
+
   return (
-    <div className="carousel" aria-roledescription="carousel">
+    <div
+      className="carousel"
+      aria-roledescription="carousel"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
       <button aria-label="Previous slide" onClick={prev} className="carousel-arrow left">
         <ChevronLeft className="w-6 h-6" />
       </button>
@@ -91,7 +114,13 @@ export const HeroCarousel = () => {
         <ChevronRight className="w-6 h-6" />
       </button>
 
-      <div className="carousel-viewport">
+      <div
+        className="carousel-viewport"
+        role="group"
+        aria-label="Slides"
+        tabIndex={0}
+        onKeyDown={onKeyDown}
+      >
         <div
           ref={trackRef}
           className={`carousel-track${isDragging ? ' dragging' : ''}`}
