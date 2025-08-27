@@ -15,21 +15,21 @@ const slides: CarouselSlide[] = [
     id: 1,
     title: "Welcome to",
     subtitle: "VALPRE",
-    image: "https://picsum.photos/seed/valpre1/812/400",
+    image: "/images/carousel-1.jpg",
     description: "Single source framework for Transformation"
   },
   {
     id: 2,
     title: "Secure Access",
     subtitle: "MANAGEMENT",
-    image: "https://picsum.photos/seed/valpre2/812/400",
+    image: "/images/carousel-2.jpg",
     description: "Streamlined approval process for teams"
   },
   {
     id: 3,
     title: "Enterprise",
     subtitle: "SOLUTION",
-    image: "https://picsum.photos/seed/valpre3/812/400",
+    image: "/images/carousel-3.jpg",
     description: "Built for modern organizations"
   }
 ];
