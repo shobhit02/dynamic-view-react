@@ -37,15 +37,14 @@ const slides: CarouselSlide[] = [
 export const HeroCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-  const [dragOffset, setDragOffset] = useState(0);
   const [paused, setPaused] = useState(false);
   const [reduced, setReduced] = useState(false);
   const pointerStartXRef = useRef<number | null>(null);
+  const dragStartAngleRef = useRef<number>(0);
   const trackRef = useRef<HTMLDivElement | null>(null);
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const [viewportWidth, setViewportWidth] = useState(0);
-  const [slideWidth, setSlideWidth] = useState(0);
-  const GAP = 24;
+  const [dragAngle, setDragAngle] = useState(0);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -68,7 +67,6 @@ export const HeroCarousel = () => {
       if (!viewportRef.current) return;
       const vw = viewportRef.current.offsetWidth;
       setViewportWidth(vw);
-      setSlideWidth(Math.round(vw * 0.8));
     };
     measure();
     window.addEventListener('resize', measure);
@@ -85,6 +83,7 @@ export const HeroCarousel = () => {
 
   const onPointerDown = (e: React.PointerEvent) => {
     pointerStartXRef.current = e.clientX;
+    dragStartAngleRef.current = trackRotation;
     setIsDragging(true);
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   };
@@ -92,23 +91,27 @@ export const HeroCarousel = () => {
   const onPointerMove = (e: React.PointerEvent) => {
     if (!isDragging || pointerStartXRef.current == null) return;
     const delta = e.clientX - pointerStartXRef.current;
-    setDragOffset(delta);
+    const pxPerStep = Math.max(200, viewportWidth || 1);
+    const angleDelta = (delta / pxPerStep) * stepAngle;
+    setDragAngle(dragStartAngleRef.current + angleDelta + currentIndex * stepAngle);
   };
 
   const onPointerUp = (e: React.PointerEvent) => {
     if (!isDragging || pointerStartXRef.current == null) return;
     const delta = e.clientX - pointerStartXRef.current;
-    const threshold = 60;
+    const thresholdPx = Math.max(40, (viewportWidth || 0) * 0.08);
     setIsDragging(false);
-    setDragOffset(0);
+    setDragAngle(0);
     pointerStartXRef.current = null;
-    if (delta > threshold) prev();
-    else if (delta < -threshold) next();
+    if (delta > thresholdPx) prev();
+    else if (delta < -thresholdPx) next();
   };
 
-  const baseOffset = viewportWidth && slideWidth ? (viewportWidth - slideWidth) / 2 : 0;
-  const translatePx = baseOffset - currentIndex * (slideWidth + GAP) + dragOffset;
-  const transform = `translateX(${translatePx}px)`;
+  const numSlides = slides.length;
+  const stepAngle = 360 / numSlides;
+  const slideContentWidth = 812;
+  const radius = Math.round((slideContentWidth / 2) / Math.tan((stepAngle * Math.PI / 180) / 2));
+  const trackRotation = -(currentIndex * stepAngle) + dragAngle;
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowRight') { e.preventDefault(); next(); }
@@ -141,39 +144,41 @@ export const HeroCarousel = () => {
       >
         <div
           ref={trackRef}
-          className={`carousel-track${isDragging ? ' dragging' : ''}`}
-          style={{ transform, gap: `${GAP}px` }}
+          className={`carousel-3d${isDragging ? ' dragging' : ''}`}
+          style={{ transform: `translate(-50%, -50%) translateZ(-${radius}px) rotateY(${trackRotation}deg)` }}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerCancel={onPointerUp}
         >
-          {slides.map((slide, idx) => (
-            <div
-              key={slide.id}
-              ref={idx === 0 ? viewportRef : undefined}
-              className={`carousel-slide${idx === currentIndex ? ' is-active' : ''}`}
-              style={slideWidth ? { width: `${slideWidth}px` } : undefined}
-            >
-              <Card className="carousel-card">
-                <div className="carousel-card-bg">
-                  <div className="carousel-radial-1" />
-                  <div className="carousel-radial-2" />
-                </div>
-
-                <div className="carousel-content">
-                  <div className="carousel-text">
-                    <h2 className="carousel-title">{slide.title}</h2>
-                    <h3 className="carousel-subtitle">{slide.subtitle}</h3>
-                    <p className="carousel-desc">{slide.description}</p>
+          {slides.map((slide, idx) => {
+            const rotate = idx * stepAngle;
+            return (
+              <div
+                key={slide.id}
+                ref={idx === 0 ? viewportRef : undefined}
+                className={`carousel-slide-3d${idx === currentIndex ? ' is-active' : ''}`}
+                style={{ transform: `rotateY(${rotate}deg) translateZ(${radius}px) translate(-50%, -50%)` }}
+              >
+                <Card className="carousel-card">
+                  <div className="carousel-card-bg">
+                    <div className="carousel-radial-1" />
+                    <div className="carousel-radial-2" />
                   </div>
-                  <div className="carousel-media">
-                    <img src={slide.image} alt="Slide media" className="carousel-img" />
+                  <div className="carousel-content">
+                    <div className="carousel-text">
+                      <h2 className="carousel-title">{slide.title}</h2>
+                      <h3 className="carousel-subtitle">{slide.subtitle}</h3>
+                      <p className="carousel-desc">{slide.description}</p>
+                    </div>
+                    <div className="carousel-media">
+                      <img src={slide.image} alt="Slide media" className="carousel-img" />
+                    </div>
                   </div>
-                </div>
-              </Card>
-            </div>
-          ))}
+                </Card>
+              </div>
+            );
+          })}
         </div>
       </div>
 
