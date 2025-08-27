@@ -167,13 +167,8 @@ export const HeroCarousel = () => {
                     <h3 className="carousel-subtitle">{slide.subtitle}</h3>
                     <p className="carousel-desc">{slide.description}</p>
                   </div>
-                  <div className="carousel-avatar-wrap">
-                    <div className="carousel-avatar">
-                      <div className="carousel-avatar-pulse" />
-                      <img src={slide.image} alt="Profile" className="w-full h-full object-cover rounded-full relative z-10" />
-                    </div>
-                    <div className="carousel-ring" />
-                    <div className="carousel-ring delay" />
+                  <div className="carousel-media">
+                    <img src={slide.image} alt="Slide media" className="carousel-img" />
                   </div>
                 </div>
               </Card>

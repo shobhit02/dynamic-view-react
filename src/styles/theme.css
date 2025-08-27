@@ -60,7 +60,7 @@ body {
 .card-description { font-size: 14px; color: var(--text-muted); margin: 0; }
 
 /* Hero Carousel */
-.carousel { position: relative; width: 100%; max-width: 1000px; margin: 0 auto; padding: 0 16px; }
+.carousel { position: relative; width: 100%; max-width: 1440px; height: 560px; margin: 0 auto; padding: 0 16px; }
 .carousel-arrow {
   position: absolute; top: 50%; transform: translateY(-50%);
   width: 48px; height: 48px;
@@ -80,10 +80,7 @@ body {
 .carousel-slide { flex-shrink: 0; transform: scale(.92); transition: transform .3s ease; }
 .carousel-slide.is-active { transform: scale(1); }
 
-.carousel-card {
-  position: relative; overflow: hidden; min-height: 400px;
-  background: linear-gradient(135deg, var(--card), color-mix(in oklab, var(--card), transparent 10%));
-}
+.carousel-card { position: relative; overflow: hidden; min-height: 560px; background: linear-gradient(135deg, var(--card), color-mix(in oklab, var(--card), transparent 10%)); }
 .carousel-card-bg { position: absolute; inset: 0; pointer-events: none; }
 .carousel-radial-1 { position: absolute; top: 0; right: 0; width: 380px; height: 380px; opacity: .2; background: radial-gradient(circle, var(--accent-weak) 0%, transparent 70%); }
 .carousel-radial-2 { position: absolute; bottom: 0; left: 0; width: 280px; height: 280px; opacity: .12; background: radial-gradient(circle, var(--accent-weak) 0%, transparent 70%); }
@@ -94,14 +91,16 @@ body {
 .carousel-subtitle { font-size: 56px; font-weight: 800; color: var(--accent); margin: 0 0 24px; line-height: 1; }
 .carousel-desc { font-size: 18px; color: var(--text-muted); max-width: 520px; }
 
-.carousel-avatar-wrap { margin-left: 48px; }
-.carousel-avatar { position: relative; width: 160px; height: 160px; border-radius: 999px; border: 4px solid color-mix(in oklab, var(--accent), transparent 40%); overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.35); }
-.carousel-avatar-pulse { position: absolute; inset: 0; animation: avatarPulse 2s linear infinite; background: conic-gradient(from 0deg, transparent 0%, color-mix(in oklab, var(--accent), transparent 70%) 50%, transparent 100%); }
-.carousel-ring { position: absolute; inset: -16px; border: 1px solid color-mix(in oklab, var(--accent), transparent 80%); border-radius: 999px; animation: ringPulse 2.5s ease-in-out infinite; }
-.carousel-ring.delay { animation-delay: 1s; }
+.carousel-media { margin-left: 48px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.carousel-img { width: 812px; height: 400px; object-fit: cover; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.35); }
 
-@keyframes avatarPulse { to { transform: rotate(360deg); } }
-@keyframes ringPulse { 0% { opacity: .4; } 50% { opacity: .15; } 100% { opacity: .4; } }
+@media (max-width: 1024px) {
+  .carousel { height: auto; }
+  .carousel-card { min-height: unset; }
+  .carousel-content { flex-direction: column; gap: 24px; padding: 32px; }
+  .carousel-media { margin-left: 0; }
+  .carousel-img { width: 100%; max-width: 812px; height: auto; aspect-ratio: 812 / 400; }
+}
 
 .carousel-dots { display: flex; justify-content: center; margin-top: 24px; gap: 12px; }
 .carousel-dot { width: 8px; height: 8px; border-radius: 999px; background: var(--text-muted); border: none; cursor: pointer; transition: transform .2s ease, background .2s ease, width .2s ease; }
