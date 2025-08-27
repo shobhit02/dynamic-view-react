@@ -158,7 +158,7 @@ export const HeroCarousel = () => {
                 key={slide.id}
                 ref={idx === 0 ? viewportRef : undefined}
                 className={`carousel-slide-3d${idx === currentIndex ? ' is-active' : ''}`}
-                style={{ transform: `rotateY(${rotate}deg) translateZ(${radius}px) translate(-50%, -50%)` }}
+                style={{ transform: `translate(-50%, -50%) rotateY(${rotate}deg) translateZ(${radius}px)` }}
               >
                 <Card className="carousel-card">
                   <div className="carousel-card-bg">

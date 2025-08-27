@@ -77,7 +77,8 @@ body {
 .carousel-viewport { overflow: hidden; border-radius: 24px; margin: 0 24px; outline: none; position: relative; perspective: 1600px; }
 .carousel-3d { position: absolute; top: 50%; left: 50%; transform-style: preserve-3d; transition: transform .9s cubic-bezier(.2,.7,.2,1); will-change: transform; }
 .carousel-3d.dragging { transition: none; }
-.carousel-slide-3d { position: absolute; top: 50%; left: 50%; transform-style: preserve-3d; width: 1000px; max-width: 100%; }
+.carousel-slide-3d { position: absolute; top: 50%; left: 50%; transform-style: preserve-3d; width: 1200px; max-width: 100%; pointer-events: auto; }
+.carousel-card { pointer-events: auto; }
 .carousel-slide-3d.is-active { }
 
 .carousel-card { position: relative; overflow: hidden; min-height: 560px; background: linear-gradient(135deg, var(--card), color-mix(in oklab, var(--card), transparent 10%)); }
