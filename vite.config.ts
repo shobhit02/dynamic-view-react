@@ -9,6 +9,17 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ["react", "react-dom"],
+          router: ["react-router-dom"],
+          vendor: ["@tanstack/react-query", "cmdk", "date-fns", "lucide-react", "recharts"],
+        },
+      },
+    },
+  },
   plugins: [
     react(),
     mode === 'development' &&
