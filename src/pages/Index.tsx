@@ -4,14 +4,14 @@ import { Footer } from '@/components/Footer';
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-valpre-dark text-valpre-text">
-      {/* Hero Section with Auto-Scroll Carousel */}
-      <section className="px-6 py-16">
+    <div className="app-root">
+      {/* Hero Section */}
+      <section className="section">
         <HeroCarousel />
       </section>
       
       {/* Access Steps Section */}
-      <section className="px-6">
+      <section className="section">
         <AccessSteps />
       </section>
       
