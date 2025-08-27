@@ -42,6 +42,10 @@ export const HeroCarousel = () => {
   const [reduced, setReduced] = useState(false);
   const pointerStartXRef = useRef<number | null>(null);
   const trackRef = useRef<HTMLDivElement | null>(null);
+  const viewportRef = useRef<HTMLDivElement | null>(null);
+  const [viewportWidth, setViewportWidth] = useState(0);
+  const [slideWidth, setSlideWidth] = useState(0);
+  const GAP = 24;
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -58,6 +62,18 @@ export const HeroCarousel = () => {
     }, 5000);
     return () => clearInterval(id);
   }, [paused, reduced]);
+
+  useEffect(() => {
+    const measure = () => {
+      if (!viewportRef.current) return;
+      const vw = viewportRef.current.offsetWidth;
+      setViewportWidth(vw);
+      setSlideWidth(Math.round(vw * 0.8));
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, []);
 
   const goTo = useCallback((index: number) => {
     const safe = (index + slides.length) % slides.length;
@@ -90,7 +106,9 @@ export const HeroCarousel = () => {
     else if (delta < -threshold) next();
   };
 
-  const transform = `translateX(calc(${-currentIndex * 100}% + ${dragOffset}px))`;
+  const baseOffset = viewportWidth && slideWidth ? (viewportWidth - slideWidth) / 2 : 0;
+  const translatePx = baseOffset - currentIndex * (slideWidth + GAP) + dragOffset;
+  const transform = `translateX(${translatePx}px)`;
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowRight') { e.preventDefault(); next(); }
@@ -124,14 +142,19 @@ export const HeroCarousel = () => {
         <div
           ref={trackRef}
           className={`carousel-track${isDragging ? ' dragging' : ''}`}
-          style={{ transform }}
+          style={{ transform, gap: `${GAP}px` }}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
           onPointerCancel={onPointerUp}
         >
           {slides.map((slide, idx) => (
-            <div key={slide.id} className={`carousel-slide${idx === currentIndex ? ' is-active' : ''}`}>
+            <div
+              key={slide.id}
+              ref={idx === 0 ? viewportRef : undefined}
+              className={`carousel-slide${idx === currentIndex ? ' is-active' : ''}`}
+              style={slideWidth ? { width: `${slideWidth}px` } : undefined}
+            >
               <Card className="carousel-card">
                 <div className="carousel-card-bg">
                   <div className="carousel-radial-1" />
