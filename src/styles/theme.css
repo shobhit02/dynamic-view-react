@@ -58,7 +58,7 @@ body {
 .carousel-arrow {
   position: absolute; top: 50%; transform: translateY(-50%);
   width: 48px; height: 48px;
-  background: color-mix(in oklab, var(--card) 80%, transparent);
+  background: transparent;
   border: 1px solid var(--border);
   border-radius: 999px;
   display: flex; align-items: center; justify-content: center;
@@ -75,7 +75,7 @@ body {
 .carousel-card { pointer-events: auto; }
 .carousel-slide-3d.is-active { }
 
-.carousel-card { position: relative; overflow: hidden; min-height: 560px; background: #ffffff; border: 1px solid #e5e7eb; }
+.carousel-card { position: relative; overflow: hidden; min-height: 560px; background: transparent; border: 1px solid transparent; box-shadow: none; }
 .carousel-card-bg { position: absolute; inset: 0; pointer-events: none; }
 .carousel-radial-1 { position: absolute; top: 0; right: 0; width: 380px; height: 380px; opacity: .2; background: radial-gradient(circle, var(--accent-weak) 0%, transparent 70%); }
 .carousel-radial-2 { position: absolute; bottom: 0; left: 0; width: 280px; height: 280px; opacity: .12; background: radial-gradient(circle, var(--accent-weak) 0%, transparent 70%); }
